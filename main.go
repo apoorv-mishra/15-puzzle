@@ -19,9 +19,9 @@ type Square struct {
 }
 
 type Board struct {
-	width   int
-	height  int
-	squares []*Square
+	width  int
+	height int
+	rows   [][]*Square
 }
 
 func NewBoard(w, h int) *Board {
@@ -35,12 +35,13 @@ func NewBoard(w, h int) *Board {
 		letters[i], letters[j] = letters[j], letters[i]
 	})
 	for x, letterIdx := 0, 0; x < w; x++ {
+		var squares []*Square
 		for y := 0; y < h; y++ {
-			var sq *Square
-			sq = NewSquare(letters[letterIdx])
-			board.squares = append(board.squares, sq)
+			sq := NewSquare(letters[letterIdx])
+			squares = append(squares, sq)
 			letterIdx++
 		}
+		board.rows = append(board.rows, squares)
 	}
 	return board
 }
@@ -88,11 +89,9 @@ func (sq *Square) draw(s tcell.Screen, x int, y int) {
 
 func (b *Board) draw(s tcell.Screen, x int, y int) {
 	s.Clear()
-	index := 0
 	for sy := 0; sy < b.height; sy += 1 {
 		for sx := 0; sx < b.width; sx += 1 {
-			b.squares[index].draw(s, x+sx*5, y+sy*3)
-			index++
+			b.rows[sy][sx].draw(s, x+sx*5, y+sy*3)
 		}
 	}
 	s.Show()
