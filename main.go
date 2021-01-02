@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
+	"time"
 
 	"github.com/gdamore/tcell/v2"
 	"github.com/gdamore/tcell/v2/encoding"
@@ -27,17 +29,17 @@ func NewBoard(w, h int) *Board {
 		width:  w,
 		height: h,
 	}
-	letter := rune(65)
-	for x := 0; x < w; x++ {
+	letters := []rune{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', ' '}
+	rand.Seed(time.Now().UTC().UnixNano())
+	rand.Shuffle(len(letters), func(i, j int) {
+		letters[i], letters[j] = letters[j], letters[i]
+	})
+	for x, letterIdx := 0, 0; x < w; x++ {
 		for y := 0; y < h; y++ {
 			var sq *Square
-			if x == w-1 && y == h-1 {
-				sq = NewSquare(' ')
-			} else {
-				sq = NewSquare(letter)
-			}
+			sq = NewSquare(letters[letterIdx])
 			board.squares = append(board.squares, sq)
-			letter++
+			letterIdx++
 		}
 	}
 	return board
