@@ -85,6 +85,7 @@ func (sq *Square) draw(s tcell.Screen, x int, y int) {
 }
 
 func (b *Board) draw(s tcell.Screen, x int, y int) {
+	s.Clear()
 	index := 0
 	for sy := 0; sy < b.height; sy += 1 {
 		for sx := 0; sx < b.width; sx += 1 {
@@ -92,6 +93,7 @@ func (b *Board) draw(s tcell.Screen, x int, y int) {
 			index++
 		}
 	}
+	s.Show()
 }
 
 func main() {
@@ -120,7 +122,8 @@ func main() {
 	for {
 		switch ev := s.PollEvent().(type) {
 		case *tcell.EventResize:
-			s.Sync()
+			screenW, screenH = s.Size()
+			board.draw(s, (screenW-board.width*5)>>1, (screenH-board.height*3)>>1)
 		case *tcell.EventKey:
 			if ev.Key() == tcell.KeyEscape {
 				s.Fini()
