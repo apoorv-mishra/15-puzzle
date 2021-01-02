@@ -15,3 +15,6 @@
 # vendor/
 
 scratch-pad.txt
+~*
+*.swo
+*.swp
