@@ -19,6 +19,8 @@ type Square struct {
 type Board struct {
 	width   int
 	height  int
+	startX  int
+	startY  int
 	squares []*Square
 }
 
@@ -113,7 +115,9 @@ func main() {
 	s.SetStyle(defStyle)
 
 	board := NewBoard(4, 4)
-	board.draw(s, 5, 5)
+
+	screenW, screenH := s.Size()
+	board.draw(s, (screenW-board.width*5)>>1, (screenH-board.height*3)>>1)
 
 	for {
 		switch ev := s.PollEvent().(type) {
